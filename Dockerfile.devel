@@ -1,0 +1,11 @@
+FROM metno/pycsw:2.4.2
+LABEL purpose="Development of the S-ENDA CSW catalog service"
+ENV PYTHONUNBUFFERED=1
+
+USER root
+RUN echo "alias l='ls -hlrt --color'" >> /root/.bashrc
+# Install dependencies
+RUN pip install \
+    coverage \
+    ipdb
+

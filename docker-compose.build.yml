@@ -1,0 +1,12 @@
+# Usage: docker-compose -f docker-compose.yml -f docker-compose.build.yml build
+---
+version: '3.4'
+
+services:
+  #
+  # catalog-service-api (pycsw)
+  #
+
+  catalog-service-api:
+    build:
+      context: ./catalog-service-api

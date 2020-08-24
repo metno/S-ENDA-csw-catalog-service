@@ -1,0 +1,32 @@
+# PyCharm IDE project configuration files
+.idea/
+
+# Ipython/Jupyter Notebooks checkpoint directory
+.ipynb_checkpoints/
+
+# OS X system file
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# IPs
+config.yml
+
+# Vagrant
+.vagrant/
+
+# Logs
+*.log
+
+# Temporary vim files
+*.swp
+
+# Local overrides
+docker-compose.override.yml
+
+# Never check in metadata repository
+S-ENDA-metadata
+
+# Visualstudio
+.vscode/
