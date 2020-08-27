@@ -35,6 +35,8 @@ Vagrant.configure("2") do |config|
 
   config.vm.network "private_network", ip: "10.20.30.10"
 
+  config.ssh.forward_agent = true
+
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "4096"
     vb.cpus = 4
@@ -53,9 +55,11 @@ Vagrant.configure("2") do |config|
     apt-get update
     apt-get install -y git wget unattended-upgrades
     apt-get install -y docker.io docker-compose
+    apt-get remove golang-docker-credential-helpers -y
   SHELL
 
   config.vm.provision "50-rebuild", type: "shell", run: "always", inline: <<-SHELL
+    echo -e "Host *\\n\\tStrictHostKeyChecking no" > $HOME/.ssh/config
     cd /vagrant
     ./build_container.sh
     #if [[ -n "#{ENV['BUILD']}" ]]
