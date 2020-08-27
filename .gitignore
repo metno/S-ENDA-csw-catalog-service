@@ -16,6 +16,9 @@ config.yml
 # Vagrant
 .vagrant/
 
+# Development code used in Docker volumes
+lib/
+
 # Logs
 *.log
 
