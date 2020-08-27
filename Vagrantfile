@@ -37,6 +37,11 @@ Vagrant.configure("2") do |config|
 
   config.ssh.forward_agent = true
 
+  # To use your local .bashrc, .bash_history, and .python_history
+  #config.vm.provision "file", source: "~/.bashrc", destination: "~/.bashrc"
+  config.vm.provision "file", source: "~/.bash_history", destination: "~/.bash_history"
+  config.vm.provision "file", source: "~/.python_history", destination: "~/.python_history"
+
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "4096"
     vb.cpus = 4
@@ -55,19 +60,23 @@ Vagrant.configure("2") do |config|
     apt-get update
     apt-get install -y git wget unattended-upgrades
     apt-get install -y docker.io docker-compose
-    apt-get remove golang-docker-credential-helpers -y
+    # This also removes docker-compose:
+    #apt-get remove -y golang-docker-credential-helpers
   SHELL
 
   config.vm.provision "50-rebuild", type: "shell", run: "always", inline: <<-SHELL
     echo -e "Host *\\n\\tStrictHostKeyChecking no" > $HOME/.ssh/config
+    # I really need these...
+    echo "alias l='ls -hlrt --color'" >> $HOME/.bashrc
+    echo "alias ..='cd ..'" >> $HOME/.bashrc
     cd /vagrant
-    ./build_container.sh
-    #if [[ -n "#{ENV['BUILD']}" ]]
-    #then
-    #  docker-compose -f docker-compose.yml -f docker-compose.build.yml build --pull
-    #fi
+    ./build_container.dev.sh
+    if [[ -n "#{ENV['BUILD']}" ]]
+    then
+      docker-compose -f docker-compose.yml -f docker-compose.build.yml build --pull
+    fi
     #./deploy-metadata.sh
-    #docker-compose up -d
+    docker-compose up -d
   SHELL
 
   config.vm.post_up_message = $welcome_msg
