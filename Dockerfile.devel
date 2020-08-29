@@ -1,12 +1,21 @@
-FROM metno/pycsw:2.4.2
+#FROM metno/pycsw:2.4.2
+FROM geopython/pycsw
 LABEL purpose="Development of the S-ENDA CSW catalog service"
 ENV PYTHONUNBUFFERED=1
 
 USER root
 # Install dependencies
-RUN pip install \
+RUN pip3 install \
+    gunicorn \
+    lxml \
+    parmap \
+    psycopg2 \
+    sqlalchemy \
+    xmltodict \
     coverage \
     ipdb
+
+RUN apk add --no-cache bash
 
 WORKDIR /home/pycsw
 USER pycsw
