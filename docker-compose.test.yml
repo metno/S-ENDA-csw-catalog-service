@@ -1,6 +1,6 @@
 # Usage: docker-compose -f docker-compose.yml -f docker-compose.test.yml build
 ---
-version: '3.4'
+version: '3.4' # minimum docker-compose file format version
 
 services:
   #

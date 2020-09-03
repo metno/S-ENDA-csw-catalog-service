@@ -1,6 +1,6 @@
 # Usage: docker-compose -f docker-compose.yml -f docker-compose.build.yml build
 ---
-version: '3.4'
+version: '3.4' # minimum docker-compose file format version
 
 services:
   #
@@ -10,3 +10,11 @@ services:
   catalog-service-api:
     build:
       context: ./catalog-service-api
+
+  #
+  # iso-converter
+  #
+
+  iso-converter:
+    build:
+      context: ./iso-converter

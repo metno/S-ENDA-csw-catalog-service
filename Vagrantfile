@@ -33,8 +33,6 @@ Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/bionic64"
   config.vm.box_check_update = false
 
-  config.vm.network "private_network", ip: "10.20.30.10"
-
   config.ssh.forward_agent = true
 
   # To use your local .bashrc
@@ -46,29 +44,50 @@ Vagrant.configure("2") do |config|
     vb.default_nic_type = "virtio"
   end
 
-  config.vm.define "default" do |config|
-    if vagrant_config != {}
-      config.vm.network "public_network", ip: vagrant_config['ip'], netmask: vagrant_config['netmask'], bridge: vagrant_config['bridge']
-      config.vm.provision "shell", run: "always", inline: "ip route add default via #{ vagrant_config['gateway'] } metric 10 || exit 0"
-      config.vm.hostname = vagrant_config['hostname']
-    end
-  end
-
   config.vm.provision "00-bootstrap", type: "shell", inline: <<-SHELL
     apt-get update
     apt-get install -y git wget unattended-upgrades
     apt-get install -y docker.io docker-compose
-    # This also removes docker-compose:
-    apt-get remove -y golang-docker-credential-helpers
   SHELL
 
-  config.vm.provision "50-rebuild", type: "shell", run: "always", inline: <<-SHELL
-    echo -e "Host *\\n\\tStrictHostKeyChecking no" > $HOME/.ssh/config
+  config.vm.define "develop" do |dev|
+    dev.vm.network "private_network", ip: "10.20.30.11"
+    dev.vm.provision "50-rebuild", type: "shell", run: "always", inline: <<-SHELL
+      # This also removes docker-compose:
+      apt-get remove -y golang-docker-credential-helpers
+      echo -e "Host *\\n\\tStrictHostKeyChecking no" > $HOME/.ssh/config
+      # Build container for development env
+      cd /vagrant
+      ./build_container.dev.sh
+    SHELL
+  end
 
-    # Build container for development env
-    cd /vagrant
-    ./build_container.dev.sh
-  SHELL
+  config.vm.define "production" do |prod|
+    prod.vm.network "private_network", ip: "10.20.30.10"
+    prod.vm.provision "50-rebuild", type: "shell", run: "always", inline: <<-SHELL
+      echo -e "Host *\\n\\tStrictHostKeyChecking no" > $HOME/.ssh/config
+      cd /vagrant
+      if [[ -n "#{ENV['BUILD']}" ]]
+      then
+        docker-compose -f docker-compose.yml -f docker-compose.build.yml build --pull
+      fi
+      #./deploy-metadata.sh
+      #docker-compose up -d
+    SHELL
+  end
+
+  if vagrant_config != {}
+    config.vm.network "public_network", ip: vagrant_config['ip'], netmask: vagrant_config['netmask'], bridge: vagrant_config['bridge']
+    config.vm.provision "shell", run: "always", inline: "ip route add default via #{ vagrant_config['gateway'] } metric 10 || exit 0"
+    config.vm.hostname = vagrant_config['hostname']
+  end
+  #config.vm.define "default" do |config|
+  #  if vagrant_config != {}
+  #    config.vm.network "public_network", ip: vagrant_config['ip'], netmask: vagrant_config['netmask'], bridge: vagrant_config['bridge']
+  #    config.vm.provision "shell", run: "always", inline: "ip route add default via #{ vagrant_config['gateway'] } metric 10 || exit 0"
+  #    config.vm.hostname = vagrant_config['hostname']
+  #  end
+  #end
 
   config.vm.post_up_message = $welcome_msg
 end
