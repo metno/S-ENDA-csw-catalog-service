@@ -1,6 +1,6 @@
 FROM metno/pycsw:2.4.2
 
-ADD pycsw_local.prod.cfg /etc/pycsw/pycsw.cfg
+ADD pycsw.localtest.cfg /etc/pycsw/pycsw.cfg
 ADD pycsw_setup.sh /usr/local/bin/pycsw_setup.sh
 
 ENTRYPOINT ["/usr/local/bin/pycsw_setup.sh"]

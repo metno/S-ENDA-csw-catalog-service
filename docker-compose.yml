@@ -10,12 +10,12 @@ x-logging:
     driver: journald
 
 networks:
-  - internal
+  internal:
 
 services:
   postgis:
     image: postgis/postgis:13-master
-    network:
+    networks:
       internal:
         aliases:
           - postgis
@@ -34,13 +34,13 @@ services:
     image: docker.io/metno/senda-prototype:${VERSION:-dev}-catalog-service-api
     ports:
       - "80:8000"
-    network:
-      - internal
+    networks:
+      internal:
     environment:
       INDEXDB: "true"
       ISO_STORE: "/isostore"
     volumes:
-      - ./isostore:/isostore:ro
+      - ./lib/isostore:/isostore:ro
     logging: *default-logging-policy
     restart: *default-restart-policy
     depends_on:

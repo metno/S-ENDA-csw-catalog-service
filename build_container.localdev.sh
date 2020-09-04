@@ -35,13 +35,14 @@ name=catalog-dev
 # Remove container (if it exists)
 docker rm -f $name 2> /dev/null
 
-docker build -t $name -f Dockerfile.devel .
+docker build -t $name -f localdev/Dockerfile.localdev .
 
 cd /vagrant/lib/pycsw
 # build container
 #docker create -it -p 80:8000 --name=$name \
     #--entrypoint "" \
 docker run -p 80:8000 --name=$name \
+    --env XSLTPATH=/home/pycsw/mmd/xslt \
     --detach \
     --volume ${PWD}/pycsw:/usr/lib/python3.5/site-packages/pycsw \
     --volume ${PWD}/docs:/home/pycsw/docs \
@@ -50,14 +51,14 @@ docker run -p 80:8000 --name=$name \
     --volume ${PWD}/COMMITTERS.txt:/home/pycsw/COMMITTERS.txt \
     --volume ${PWD}/CONTRIBUTING.rst:/home/pycsw/CONTRIBUTING.rst \
     --volume ${PWD}/pycsw/plugins:/home/pycsw/pycsw/plugins \
-    --volume /vagrant/pycsw_local.dev.cfg:/etc/pycsw/pycsw.cfg \
-    -v /home/vagrant/.bashrc:/home/pycsw/.bashrc \
-    -v /home/vagrant/.bash_history:/home/pycsw/.bash_history \
-    -v /home/vagrant/.python_history:/home/pycsw/.python_history \
-    -v /vagrant/lib/mmd:/home/pycsw/mmd \
-    -v /vagrant/lib/mmd/mmd_utils:/usr/lib/python3.8/site-packages/mmd_utils \
-    -v /vagrant/lib/input_mmd_xml_files:/home/pycsw/mmd_in \
-    -v /vagrant/lib/output_pycsw_iso_xml_files:/home/pycsw/iso_out \
+    --volume /vagrant/localdev/pycsw.localdev.cfg:/etc/pycsw/pycsw.cfg \
+    --volume /home/vagrant/.bashrc:/home/pycsw/.bashrc \
+    --volume /home/vagrant/.bash_history:/home/pycsw/.bash_history \
+    --volume /home/vagrant/.python_history:/home/pycsw/.python_history \
+    --volume /vagrant/lib/mmd:/home/pycsw/mmd \
+    --volume /vagrant/lib/mmd/mmd_utils:/usr/lib/python3.8/site-packages/mmd_utils \
+    --volume /vagrant/lib/input_mmd_xml_files:/home/pycsw/mmd_in \
+    --volume /vagrant/lib/output_pycsw_iso_xml_files:/home/pycsw/iso_out \
     $name --reload
     #$name bash
 

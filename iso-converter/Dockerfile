@@ -2,7 +2,8 @@
 FROM alpine:3.11 AS builder
 
 ENV MMD_REPO=https://github.com/metno/mmd
-ENV MMD_VERSION=${MMD_VERSION:-master}
+ENV MMD_VERSION=${MMD_VERSION:-hotfix97_bug_in_executable}
+#ENV XSLTPATH=${XSLTPATH:-/usr/local/share/xslt}
 
 RUN apk add --no-cache \
   git
@@ -35,9 +36,8 @@ RUN apk add --no-cache --virtual .build-deps \
   apk del .build-deps
 
 RUN ln -s /usr/bin/python3 /usr/bin/python; \
-    mkdir -p /usr/local/share/mmd-to-iso
+      mkdir -p /usr/local/share/xslt
 
 COPY --from=builder /mmd/bin/sentinel1_mmd_to_csw_iso19139.py /usr/local/bin
 COPY --from=builder /mmd/mmd_utils/ /usr/lib/python3.8/site-packages/mmd_utils/
-COPY --from=builder /mmd/xslt/mmd-to-iso.xsl /usr/local/share/mmd-to-iso
-
+COPY --from=builder /mmd/xslt/* /usr/local/share/xslt/
