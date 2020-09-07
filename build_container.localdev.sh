@@ -55,6 +55,9 @@ docker run -p 80:8000 --name=$name \
     --volume ${PWD}/COMMITTERS.txt:/home/pycsw/COMMITTERS.txt \
     --volume ${PWD}/CONTRIBUTING.rst:/home/pycsw/CONTRIBUTING.rst \
     --volume ${PWD}/pycsw/plugins:/home/pycsw/pycsw/plugins \
+    --volume ${PWD}/requirements-dev.txt:/requirements-dev.txt \
+    --volume ${PWD}/requirements.txt:/requirements.txt \
+    --volume ${PWD}/requirements-standalone.txt:/requirements-standalone.txt \
     --volume /vagrant/localdev/pycsw.localdev.cfg:/etc/pycsw/pycsw.cfg \
     --volume /home/vagrant/.bashrc:/home/pycsw/.bashrc \
     --volume /home/vagrant/.bash_history:/home/pycsw/.bash_history \
@@ -73,7 +76,10 @@ docker run -p 80:8000 --name=$name \
 # install additional dependencies used in tests and docs 
 # - see pycsw docs at https://docs.pycsw.org/en/2.4.2/docker.html#setting-up-a-development-environment-with-docker
 pwd
+
+echo $PWD
+
 docker exec \
     -ti \
     --user root \
-    $name pip3 install -r ${PWD}/requirements-dev.txt
+    $name pip3 install -r /requirements-dev.txt
