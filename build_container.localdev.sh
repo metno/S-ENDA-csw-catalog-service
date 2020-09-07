@@ -43,8 +43,8 @@ docker build -t $name -f localdev/Dockerfile.localdev .
 cd /vagrant/lib/pycsw
 # build container
 #docker create -it -p 80:8000 --name=$name \
-    #--entrypoint "" \
 docker run -p 80:8000 --name=$name \
+    --entrypoint "" \
     --env XSLTPATH=/home/pycsw/mmd/xslt \
     --detach \
     --volume ${PWD}/pycsw:/usr/lib/python3.8/site-packages/pycsw \
@@ -66,7 +66,8 @@ docker run -p 80:8000 --name=$name \
     --volume /vagrant/lib/mmd/mmd_utils:/usr/lib/python3.8/site-packages/mmd_utils \
     --volume /vagrant/lib/input_mmd_xml_files:/home/pycsw/mmd_in \
     --volume /vagrant/lib/output_pycsw_iso_xml_files:/home/pycsw/iso_out \
-    $name --reload
+    $name sleep 1d
+    #$name --reload
     #$name bash
 
     #--volume ${PWD}/requirements-dev.txt:/home/pycsw/requirements-dev.txt \
@@ -75,11 +76,7 @@ docker run -p 80:8000 --name=$name \
 
 # install additional dependencies used in tests and docs 
 # - see pycsw docs at https://docs.pycsw.org/en/2.4.2/docker.html#setting-up-a-development-environment-with-docker
-pwd
-
-echo $PWD
-
-docker exec \
-    -ti \
-    --user root \
-    $name pip3 install -r /requirements-dev.txt
+#docker exec \
+#    -ti \
+#    --user root \
+#    $name pip3 install -r /requirements-dev.txt

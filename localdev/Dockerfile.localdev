@@ -20,14 +20,37 @@ RUN pip3 install \
 
 # The following lines are specific to the pycsw images (i.e., Alpine linux)
 RUN apk add --no-cache bash
-RUN apk add gcc \
+RUN apk add \
+    gcc \
     build-base \
     geos-dev \
     libxml2-dev \
     libxslt-dev \
     postgresql-dev \
     proj-dev \
-    python3-dev
+    libffi-dev \
+    python3-dev || exit 0
+
+# We also want netcdf4/hdf5 but I haven't managed to install them yet...
+#RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community hdf5-dev
+
+RUN pip3 install \
+    geolinks \
+    lxml \
+    OWSLib \
+    pyproj \
+    Shapely \
+    xmltodict \
+    SQLAlchemy \
+    apipkg==1.4 \
+    mock==2.0.0 \
+    Paver==1.2.4 \
+    pytest==3.0.3 \
+    pytest-cov==2.4.0 \
+    pytest-flake8==0.8.1 \
+    pytest-timeout==1.2.0 \
+    sphinx \
+    twine
 
 WORKDIR /home/pycsw
 USER pycsw
