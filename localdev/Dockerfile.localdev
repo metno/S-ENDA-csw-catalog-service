@@ -1,3 +1,5 @@
+#FROM nansencenter/nansat_base
+# nansencenter/nansat_base contains some unneeded packages but we can make our own clean image when things work as expected..
 #FROM metno/pycsw:2.4.2
 FROM geopython/pycsw
 LABEL purpose="Development of the S-ENDA CSW catalog service"
@@ -5,17 +7,18 @@ ENV PYTHONUNBUFFERED=1
 
 USER root
 # Install dependencies
-RUN pip3 install \
-    gunicorn \
-    lxml \
-    parmap \
-    psycopg2 \
-    sqlalchemy \
-    xmltodict \
-    coverage \
-    ipdb
+# This should be covered by the pycsw docker
+#RUN pip3 install \
+#    gunicorn \
+#    lxml \
+#    parmap \
+#    psycopg2 \
+#    sqlalchemy \
+#    xmltodict \
+#    coverage \
+#    ipdb
 
+# The following lines are specific to the pycsw images (i.e., Alpine linux)
 RUN apk add --no-cache bash
-
 WORKDIR /home/pycsw
 USER pycsw

@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Add development code
 cd /vagrant
 mkdir lib
@@ -6,7 +8,7 @@ cd lib
 git clone git@github.com:metno/mmd.git
 git clone git@github.com:metno/S-ENDA-metadata.git
 git clone git@github.com:metno/pycsw.git
-git clone git@github.com:metno/pycsw-container.git
+#git clone git@github.com:metno/pycsw-container.git
 
 # Set up environment
 echo "alias l='ls -hlrt --color'" >> /home/vagrant/.bashrc
@@ -35,6 +37,7 @@ name=catalog-dev
 # Remove container (if it exists)
 docker rm -f $name 2> /dev/null
 
+# Build image
 docker build -t $name -f localdev/Dockerfile.localdev .
 
 cd /vagrant/lib/pycsw
@@ -44,7 +47,8 @@ cd /vagrant/lib/pycsw
 docker run -p 80:8000 --name=$name \
     --env XSLTPATH=/home/pycsw/mmd/xslt \
     --detach \
-    --volume ${PWD}/pycsw:/usr/lib/python3.5/site-packages/pycsw \
+    --volume ${PWD}/pycsw:/usr/lib/python3.8/site-packages/pycsw \
+    --volume ${PWD}/tests:/home/pycsw/tests \
     --volume ${PWD}/docs:/home/pycsw/docs \
     --volume ${PWD}/VERSION.txt:/home/pycsw/VERSION.txt \
     --volume ${PWD}/LICENSE.txt:/home/pycsw/LICENSE.txt \
@@ -62,9 +66,14 @@ docker run -p 80:8000 --name=$name \
     $name --reload
     #$name bash
 
-## install additional dependencies used in tests and docs 
-## - see pycsw docs at https://docs.pycsw.org/en/2.4.2/docker.html#setting-up-a-development-environment-with-docker
-#docker exec \
-#    -ti \
-#    --user root \
-#    pycsw-dev pip3 install -r requirements-dev.txt
+    #--volume ${PWD}/requirements-dev.txt:/home/pycsw/requirements-dev.txt \
+    #--volume ${PWD}/requirements.txt:/home/pycsw/requirements.txt \
+    #--volume ${PWD}/requirements-standalone.txt:/home/pycsw/requirements-standalone.txt \
+
+# install additional dependencies used in tests and docs 
+# - see pycsw docs at https://docs.pycsw.org/en/2.4.2/docker.html#setting-up-a-development-environment-with-docker
+pwd
+docker exec \
+    -ti \
+    --user root \
+    $name pip3 install -r ${PWD}/requirements-dev.txt
