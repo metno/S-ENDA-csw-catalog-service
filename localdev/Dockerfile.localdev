@@ -8,17 +8,26 @@ ENV PYTHONUNBUFFERED=1
 USER root
 # Install dependencies
 # This should be covered by the pycsw docker
-#RUN pip3 install \
-#    gunicorn \
-#    lxml \
-#    parmap \
-#    psycopg2 \
-#    sqlalchemy \
-#    xmltodict \
-#    coverage \
-#    ipdb
+RUN pip3 install \
+    gunicorn \
+    lxml \
+    parmap \
+    psycopg2 \
+    sqlalchemy \
+    xmltodict \
+    coverage \
+    ipdb
 
 # The following lines are specific to the pycsw images (i.e., Alpine linux)
 RUN apk add --no-cache bash
+RUN apk add gcc \
+    build-base \
+    geos-dev \
+    libxml2-dev \
+    libxslt-dev \
+    postgresql-dev \
+    proj-dev \
+    python3-dev
+
 WORKDIR /home/pycsw
 USER pycsw
