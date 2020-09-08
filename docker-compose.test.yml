@@ -10,5 +10,5 @@ services:
   catalog-service-api:
     build:
       context: ./catalog-service-api
-      dockerfile: ${DOCKERFILE:-Dockerfile.staging}
+      dockerfile: ${DOCKERFILE:-Dockerfile}
 
