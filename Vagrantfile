@@ -86,6 +86,7 @@ Vagrant.configure("2") do |config|
       cd /vagrant
       if [[ -n "#{ENV['BUILD']}" ]]
       then
+        export DOCKERFILE='Dockerfile.localtest'
         docker-compose -f docker-compose.yml -f docker-compose.build.yml build --pull
       fi
       # This doesn't work - we currently need to login and run the script inside the vm...
