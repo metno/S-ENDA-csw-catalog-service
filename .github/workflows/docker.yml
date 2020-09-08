@@ -50,16 +50,18 @@ jobs:
           [ "$VERSION" == "master" ] && export VERSION=dev
 
           echo VERSION=$VERSION
-          docker-compose build
-          docker-compose push
+          docker-compose -f docker-compose.yml -f docker-compose.build.yml build
+          docker-compose -f docker-compose.yml -f docker-compose.build.yml push catalog-service-api
+          docker-compose -f docker-compose.yml -f docker-compose.build.yml push iso-converter
 
           # tag and push versions X.X and X and latest
           if echo "$VERSION" | grep -qE '^\w+\.\w+\.\w+$' && [ "$LATEST_TAG" == "$VERSION" ]; then
             for VERSION in $(echo $VERSION | cut -d. -f1,2) $(echo $VERSION | cut -d. -f1) latest; do
               export VERSION
               echo VERSION=$VERSION
-              docker-compose build
-              docker-compose push
+              docker-compose -f docker-compose.yml -f docker-compose.build.yml build
+              docker-compose -f docker-compose.yml -f docker-compose.build.yml push catalog-service-api
+              docker-compose -f docker-compose.yml -f docker-compose.build.yml push iso-converter
             done
           fi
 
@@ -85,15 +87,17 @@ jobs:
           [ "$VERSION" == "master" ] && export VERSION=dev
 
           echo VERSION=$VERSION
-          docker-compose build
-          docker-compose push
+          docker-compose -f docker-compose.yml -f docker-compose.build.yml build
+          docker-compose -f docker-compose.yml -f docker-compose.build.yml push catalog-service-api
+          docker-compose -f docker-compose.yml -f docker-compose.build.yml push iso-converter
 
           # tag and push versions X.X and X and latest
           if echo "$VERSION" | grep -qE '^\w+\.\w+\.\w+$' && [ "$LATEST_TAG" == "$VERSION" ]; then
             for VERSION in $(echo $VERSION | cut -d. -f1,2) $(echo $VERSION | cut -d. -f1) latest; do
               export VERSION
               echo VERSION=$VERSION
-              docker-compose build
-              docker-compose push
+              docker-compose -f docker-compose.yml -f docker-compose.build.yml build
+              docker-compose -f docker-compose.yml -f docker-compose.build.yml push catalog-service-api
+              docker-compose -f docker-compose.yml -f docker-compose.build.yml push iso-converter
             done
           fi
