@@ -71,7 +71,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: |
-          docker-compose --file docker-compose.test.yml build
+          docker-compose -f docker-compose.yml -f docker-compose.test.yml build catalog-service-api
+          docker-compose -f docker-compose.yml -f docker-compose.test.yml build iso-converter
           #docker-compose --file docker-compose.test.yml run sut
 
   push:

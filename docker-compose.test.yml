@@ -12,3 +12,10 @@ services:
       context: ./catalog-service-api
       dockerfile: ${DOCKERFILE:-Dockerfile}
 
+  #
+  # iso-converter
+  #
+
+  iso-converter:
+    build:
+      context: ./iso-converter
