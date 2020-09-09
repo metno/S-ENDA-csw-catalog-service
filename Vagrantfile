@@ -64,6 +64,7 @@ Vagrant.configure("2") do |config|
     ltest.vm.provision "50-rebuild", type: "shell", run: "always", inline: <<-SHELL
       echo -e "Host *\\n\\tStrictHostKeyChecking no" > $HOME/.ssh/config
       export MMD_IN='/vagrant/lib/input_mmd_xml_files'
+      mkdir $MMD_IN
       # Keep bash history between ups and destroys
       FILE=/vagrant/lib/dot_bash_history
       if [[ ! -f "$FILE" ]]; then
@@ -78,8 +79,7 @@ Vagrant.configure("2") do |config|
         export DOCKERFILE='Dockerfile.localtest'
         docker-compose -f docker-compose.yml -f docker-compose.build.yml build --pull
       fi
-      # This doesn't work - we currently need to login and run the script inside the vm...
-      #./deploy-metadata.sh
+      ./deploy-metadata.sh
       docker-compose up -d
     SHELL
   end
