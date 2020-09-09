@@ -21,7 +21,7 @@ services:
           - postgis
     environment:
       POSTGRES_USER: postgis
-      POSTGRES_PASSWORD: mypassword
+      POSTGRES_PASSWORD: ${POSTGIS_PW:-mypassword}
       POSTGRES_DB: csw_db
     volumes:
       - /srv/postgis:/var/lib/postgresql/data
