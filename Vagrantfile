@@ -56,17 +56,6 @@ Vagrant.configure("2") do |config|
       # Build container for local development env
       cd /vagrant
       ./build_container.localdev.sh
-      # Or follow "4-minute install" at https://docs.pycsw.org/en/latest/installation.html#installing-from-the-python-package-index-pypi
-      #cd /vagrant/lib/
-      #if [[ ! -d "pycsw" ]]; then
-      #    git clone git@github.com:metno/pycsw.git
-      #else
-      #    cd pycsw
-      #    git pull
-      #fi
-      #cd /vagrant/lib/pycsw
-      #virtualenv pycsw && cd pycsw && . bin/activate
-      
     SHELL
   end
 
