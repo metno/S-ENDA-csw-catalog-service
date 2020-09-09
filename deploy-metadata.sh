@@ -30,12 +30,12 @@ rm -rf /isostore/*
 cd /vagrant
 # add --no-cache to the end of the next line to get the latest version of MMD
 docker-compose -f docker-compose.yml -f docker-compose.build.yml build
-#docker-compose run --rm \
-#    -e XSLTPATH=/usr/local/share/xslt \
-#    -v /vagrant/lib/isostore:/isostore \
-#    -v $MMD_IN:/mmddir \
-#    iso-converter \
-#    sentinel1_mmd_to_csw_iso19139.py -i /mmddir -o /isostore
+docker-compose run --rm \
+    -e XSLTPATH=/usr/local/share/xslt \
+    -v /vagrant/lib/isostore:/isostore \
+    -v $MMD_IN:/mmddir \
+    iso-converter \
+    sentinel1_mmd_to_csw_iso19139.py -i /mmddir -o /isostore
 
 # Restart catalog-service-api
 docker-compose rm -sf catalog-service-api
