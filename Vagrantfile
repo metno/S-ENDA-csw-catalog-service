@@ -64,7 +64,7 @@ Vagrant.configure("2") do |config|
     ltest.vm.provision "50-rebuild", type: "shell", run: "always", inline: <<-SHELL
       echo -e "Host *\\n\\tStrictHostKeyChecking no" > $HOME/.ssh/config
       export MMD_IN='/vagrant/lib/input_mmd_files'
-      mkdir $MMD_IN
+      mkdir -p $MMD_IN
       # Keep bash history between ups and destroys
       FILE=/vagrant/lib/dot_bash_history
       if [[ ! -f "$FILE" ]]; then
@@ -72,7 +72,7 @@ Vagrant.configure("2") do |config|
         chown vagrant:vagrant $FILE
       fi
       BHIST=/home/vagrant/.bash_history
-      ln -s $FILE $BHIST
+      ln -sf $FILE $BHIST
       cd /vagrant
       if [[ -n "#{ENV['BUILD']}" ]]
       then

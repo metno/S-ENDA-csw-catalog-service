@@ -20,7 +20,7 @@ if [[ ! -f "$FILE" ]]; then
   chown vagrant:vagrant $FILE
 fi
 BHIST=/home/vagrant/.bash_history
-ln -s $FILE $BHIST
+ln -sf $FILE $BHIST
 
 # Keep python history between ups and destroys
 FILE=/vagrant/lib/dot_python_history
@@ -29,7 +29,7 @@ if [[ ! -f "$FILE" ]]; then
   chown vagrant:vagrant $FILE
 fi
 PHIST=/home/vagrant/.python_history
-ln -s $FILE $PHIST
+ln -sf $FILE $PHIST
 
 cd /vagrant
 name=catalog-dev
