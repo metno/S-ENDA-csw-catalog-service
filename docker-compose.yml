@@ -20,8 +20,8 @@ services:
         aliases:
           - postgis
     environment:
-      POSTGRES_USER: postgis
-      POSTGRES_PASSWORD: ${POSTGIS_PW:-mypassword}
+      POSTGRES_USER: ${POSTGRES_USER:-postgis}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-mypassword}
       POSTGRES_DB: csw_db
     volumes:
       - /srv/postgis:/var/lib/postgresql/data
@@ -46,6 +46,7 @@ services:
     environment:
       INDEXDB: "true"
       ISO_STORE: "/isostore"
+      PYCSW_DATABASE: "postgresql://${POSTGRES_USER:-postgis}:${POSTGRES_PASSWORD:-mypassword}@postgis:5432/csw_db"
     volumes:
       - ./lib/isostore:/isostore:ro
     logging: *default-logging-policy
