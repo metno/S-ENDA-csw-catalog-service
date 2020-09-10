@@ -63,7 +63,7 @@ Vagrant.configure("2") do |config|
     ltest.vm.network "private_network", ip: "10.20.30.10"
     ltest.vm.provision "50-rebuild", type: "shell", run: "always", inline: <<-SHELL
       echo -e "Host *\\n\\tStrictHostKeyChecking no" > $HOME/.ssh/config
-      export MMD_IN='/vagrant/lib/input_mmd_xml_files'
+      export MMD_IN='/vagrant/lib/input_mmd_files'
       mkdir $MMD_IN
       # Keep bash history between ups and destroys
       FILE=/vagrant/lib/dot_bash_history

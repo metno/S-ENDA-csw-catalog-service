@@ -27,6 +27,13 @@ services:
       - /srv/postgis:/var/lib/postgresql/data
 
   #
+  # iso-converter
+  #
+
+  iso-converter:
+    image: docker.io/metno/senda-iso-converter:${VERSION:-dev}
+
+  #
   # catalog-service-api (pycsw)
   #
 
@@ -45,10 +52,3 @@ services:
     restart: *default-restart-policy
     depends_on:
       - postgis
-
-  #
-  # iso-converter
-  #
-
-  iso-converter:
-    image: docker.io/metno/senda-iso-converter:${VERSION:-dev}
