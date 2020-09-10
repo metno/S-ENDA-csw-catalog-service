@@ -1,4 +1,5 @@
 #!/bin/bash
+echo "WARNING: this script only works for the localtest vm. A 'staging' version exists in the prototype repos."
 if [[ -z "${MMD_IN}" ]]; then
     echo "Please set environment variable: MMD_IN"
     exit
@@ -28,6 +29,7 @@ fi
 
 rm -rf /isostore/*
 cd /vagrant
+export DOCKERFILE='Dockerfile.localtest'
 # add --no-cache to the end of the next line to get the latest version of MMD
 docker-compose -f docker-compose.yml -f docker-compose.build.yml build
 docker-compose run --rm \
