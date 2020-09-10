@@ -65,7 +65,7 @@ docker run -p 80:8000 --name=$name \
     --volume /vagrant/lib/mmd/bin/sentinel1_mmd_to_csw_iso19139.py:/home/pycsw/mmd/bin/sentinel1_mmd_to_csw_iso19139.py \
     --volume /vagrant/lib/mmd/xslt:/home/pycsw/mmd/xslt \
     --volume /vagrant/lib/mmd/mmd_utils:/usr/lib/python3.8/site-packages/mmd_utils \
-    --volume /vagrant/lib/input_mmd_xml_files:/home/pycsw/mmd_in \
+    --volume /vagrant/lib/input_mmd_files:/home/pycsw/mmd_in \
     --volume /vagrant/lib/output_pycsw_iso_xml_files:/home/pycsw/iso_out \
     $name sleep 1d
     #$name --reload
