@@ -38,7 +38,7 @@ Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "4096"
     vb.cpus = 4
-    vb.default_nic_type = "virtio"
+    #vb.default_nic_type = "virtio"
   end
 
   config.vm.provision "00-bootstrap", type: "shell", inline: <<-SHELL
