@@ -1,5 +1,3 @@
-#FROM nansencenter/nansat_base
-# nansencenter/nansat_base contains some unneeded packages but we can make our own clean image when things work as expected..
 #FROM metno/pycsw:2.4.2
 FROM geopython/pycsw
 LABEL purpose="Development of the S-ENDA CSW catalog service"
@@ -12,7 +10,7 @@ RUN pip3 install \
     gunicorn \
     lxml \
     parmap \
-    psycopg2 \
+    psycopg2-binary \
     sqlalchemy \
     xmltodict \
     coverage \
