@@ -17,17 +17,18 @@ RUN pip3 install \
     ipdb
 
 # The following lines are specific to the pycsw images (i.e., Alpine linux)
-RUN apk add --no-cache bash
-RUN apk add \
+#RUN apk add --no-cache bash
+RUN apt-get update && apt-get install -y \
     gcc \
-    build-base \
-    geos-dev \
+    build-essential \
+    libgeos-dev \
     libxml2-dev \
     libxslt-dev \
-    postgresql-dev \
-    proj-dev \
+    postgresql-server-dev-all \
+    libproj-dev \
     libffi-dev \
-    python3-dev || exit 0
+    python3-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 # We also want netcdf4/hdf5 but I haven't managed to install them yet...
 #RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community hdf5-dev
