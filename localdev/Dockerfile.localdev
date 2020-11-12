@@ -1,5 +1,5 @@
 #FROM metno/pycsw:2.4.2
-FROM geopython/pycsw
+FROM geopython/pycsw:latest
 LABEL purpose="Development of the S-ENDA CSW catalog service"
 ENV PYTHONUNBUFFERED=1
 
