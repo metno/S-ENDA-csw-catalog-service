@@ -49,6 +49,8 @@ Vagrant.configure("2") do |config|
     # Keep bash history between ups and destroys
     cd /vagrant
     mkdir -p /vagrant/lib
+    export MMD_IN='/vagrant/lib/input_mmd_files'
+    mkdir -p $MMD_IN
     ./create_history_files.sh
   SHELL
 
@@ -70,8 +72,6 @@ Vagrant.configure("2") do |config|
   config.vm.define "localtest", primary: true do |ltest|
     ltest.vm.network "private_network", ip: "10.20.30.10"
     ltest.vm.provision "50-rebuild", type: "shell", run: "always", inline: <<-SHELL
-      export MMD_IN='/vagrant/lib/input_mmd_files'
-      mkdir -p $MMD_IN
       cd /vagrant
       if [[ -n "#{ENV['BUILD']}" ]]
       then
@@ -88,13 +88,6 @@ Vagrant.configure("2") do |config|
     config.vm.provision "shell", run: "always", inline: "ip route add default via #{ vagrant_config['gateway'] } metric 10 || exit 0"
     config.vm.hostname = vagrant_config['hostname']
   end
-  #config.vm.define "default" do |config|
-  #  if vagrant_config != {}
-  #    config.vm.network "public_network", ip: vagrant_config['ip'], netmask: vagrant_config['netmask'], bridge: vagrant_config['bridge']
-  #    config.vm.provision "shell", run: "always", inline: "ip route add default via #{ vagrant_config['gateway'] } metric 10 || exit 0"
-  #    config.vm.hostname = vagrant_config['hostname']
-  #  end
-  #end
 
   config.vm.post_up_message = $welcome_msg
 end
