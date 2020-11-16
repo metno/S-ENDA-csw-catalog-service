@@ -48,6 +48,7 @@ Vagrant.configure("2") do |config|
     echo -e "Host *\\n\\tStrictHostKeyChecking no" > $HOME/.ssh/config
     # Keep bash history between ups and destroys
     cd /vagrant
+    mkdir -p /vagrant/lib
     ./create_history_files.sh
   SHELL
 
