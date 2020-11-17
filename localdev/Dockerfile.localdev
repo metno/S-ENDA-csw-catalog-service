@@ -1,7 +1,5 @@
-#FROM nansencenter/nansat_base
-# nansencenter/nansat_base contains some unneeded packages but we can make our own clean image when things work as expected..
 #FROM metno/pycsw:2.4.2
-FROM geopython/pycsw
+FROM geopython/pycsw:latest
 LABEL purpose="Development of the S-ENDA CSW catalog service"
 ENV PYTHONUNBUFFERED=1
 
@@ -12,24 +10,25 @@ RUN pip3 install \
     gunicorn \
     lxml \
     parmap \
-    psycopg2 \
+    psycopg2-binary \
     sqlalchemy \
     xmltodict \
     coverage \
     ipdb
 
 # The following lines are specific to the pycsw images (i.e., Alpine linux)
-RUN apk add --no-cache bash
-RUN apk add \
+#RUN apk add --no-cache bash
+RUN apt-get update && apt-get install -y \
     gcc \
-    build-base \
-    geos-dev \
+    build-essential \
+    libgeos-dev \
     libxml2-dev \
     libxslt-dev \
-    postgresql-dev \
-    proj-dev \
+    postgresql-server-dev-all \
+    libproj-dev \
     libffi-dev \
-    python3-dev || exit 0
+    python3-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 # We also want netcdf4/hdf5 but I haven't managed to install them yet...
 #RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community hdf5-dev

@@ -45,6 +45,13 @@ Vagrant.configure("2") do |config|
     apt-get update
     apt-get install -y git wget unattended-upgrades
     apt-get install -y docker.io docker-compose
+    echo -e "Host *\\n\\tStrictHostKeyChecking no" > $HOME/.ssh/config
+    # Keep bash history between ups and destroys
+    cd /vagrant
+    mkdir -p /vagrant/lib
+    export MMD_IN='/vagrant/lib/input_mmd_files'
+    mkdir -p $MMD_IN
+    ./create_history_files.sh
   SHELL
 
   config.vm.define "localdev" do |ldev|
@@ -52,9 +59,12 @@ Vagrant.configure("2") do |config|
     ldev.vm.provision "50-rebuild", type: "shell", run: "always", inline: <<-SHELL
       # This also removes docker-compose:
       apt-get remove -y golang-docker-credential-helpers
-      echo -e "Host *\\n\\tStrictHostKeyChecking no" > $HOME/.ssh/config
+      # Set up environment
+      echo "alias l='ls -hlrt --color'" >> /home/vagrant/.bashrc
+      echo "alias ..='cd ..'" >> /home/vagrant/.bashrc
       # Build container for local development env
       cd /vagrant
+      ./clone_or_update_git_repositories.sh
       ./build_container.localdev.sh
     SHELL
   end
@@ -62,17 +72,6 @@ Vagrant.configure("2") do |config|
   config.vm.define "localtest", primary: true do |ltest|
     ltest.vm.network "private_network", ip: "10.20.30.10"
     ltest.vm.provision "50-rebuild", type: "shell", run: "always", inline: <<-SHELL
-      echo -e "Host *\\n\\tStrictHostKeyChecking no" > $HOME/.ssh/config
-      export MMD_IN='/vagrant/lib/input_mmd_files'
-      mkdir -p $MMD_IN
-      # Keep bash history between ups and destroys
-      FILE=/vagrant/lib/dot_bash_history
-      if [[ ! -f "$FILE" ]]; then
-        touch $FILE
-        chown vagrant:vagrant $FILE
-      fi
-      BHIST=/home/vagrant/.bash_history
-      ln -sf $FILE $BHIST
       cd /vagrant
       if [[ -n "#{ENV['BUILD']}" ]]
       then
@@ -89,13 +88,6 @@ Vagrant.configure("2") do |config|
     config.vm.provision "shell", run: "always", inline: "ip route add default via #{ vagrant_config['gateway'] } metric 10 || exit 0"
     config.vm.hostname = vagrant_config['hostname']
   end
-  #config.vm.define "default" do |config|
-  #  if vagrant_config != {}
-  #    config.vm.network "public_network", ip: vagrant_config['ip'], netmask: vagrant_config['netmask'], bridge: vagrant_config['bridge']
-  #    config.vm.provision "shell", run: "always", inline: "ip route add default via #{ vagrant_config['gateway'] } metric 10 || exit 0"
-  #    config.vm.hostname = vagrant_config['hostname']
-  #  end
-  #end
 
   config.vm.post_up_message = $welcome_msg
 end
