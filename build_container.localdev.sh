@@ -16,7 +16,7 @@ docker run -p 80:8000 --name=$name \
     --entrypoint "" \
     --env XSLTPATH=/home/pycsw/mmd/xslt \
     --detach \
-    --volume ${PWD}/pycsw:/usr/lib/python3.8/site-packages/pycsw \
+    --volume ${PWD}/pycsw:/usr/local/lib/python3.8/site-packages/pycsw \
     --volume ${PWD}/tests:/home/pycsw/tests \
     --volume ${PWD}/docs:/home/pycsw/docs \
     --volume ${PWD}/VERSION.txt:/home/pycsw/VERSION.txt \
@@ -31,9 +31,9 @@ docker run -p 80:8000 --name=$name \
     --volume /home/vagrant/.bashrc:/home/pycsw/.bashrc \
     --volume /home/vagrant/.bash_history:/home/pycsw/.bash_history \
     --volume /home/vagrant/.python_history:/home/pycsw/.python_history \
-    --volume /vagrant/lib/mmd/bin/sentinel1_mmd_to_csw_iso19139.py:/home/pycsw/mmd/bin/sentinel1_mmd_to_csw_iso19139.py \
+    --volume /vagrant/lib/py-mmd-tools/script/xmlconverter.py:/home/pycsw/scripts/xmlconverter.py \
     --volume /vagrant/lib/mmd/xslt:/home/pycsw/mmd/xslt \
-    --volume /vagrant/lib/mmd/mmd_utils:/usr/lib/python3.8/site-packages/mmd_utils \
+    --volume /vagrant/lib/py-mmd-tools/py_mmd_tools:/usr/local/lib/python3.8/site-packages/py_mmd_tools \
     --volume /vagrant/lib/input_mmd_files:/home/pycsw/mmd_in \
     --volume /vagrant/lib/output_pycsw_iso_xml_files:/home/pycsw/iso_out \
     $name sleep 1d
