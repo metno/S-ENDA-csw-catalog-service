@@ -86,10 +86,10 @@ Vagrant.configure("2") do |config|
       #docker-compose -f docker-compose.yml -f docker-compose.build.yml build
       #docker-compose up -d
       # Set folder with input MMD files
+      docker-compose up -d
       export MMD_IN='/vagrant/lib/input_mmd_files'
       export GET_GIT_MMD_FILES=true
       ./deploy-metadata.sh
-      docker-compose up -d
     SHELL
   end
 
