@@ -5,25 +5,19 @@ if [[ -z "${MMD_IN}" ]]; then
     exit
 fi
 
-echo "Webhook triggered." | systemd-cat -t webhook-handler
-
 # Work in shared folder
-mkdir -p /vagrant/lib
 cd /vagrant/lib
 
-echo "Make new directory /vagrant/lib/isostore"
-mkdir -p isostore
-
-if [[ "$MMD_IN" == "S-ENDA-metadata" ]]; then
-  # Check out latest version of metadata (used on staging/production server)
-  if [ -d S-ENDA-metadata ]; then
-    echo "S-ENDA-metadata repository exists locally, running git pull." | systemd-cat -t webhook-handler
-    cd S-ENDA-metadata
+if [[ "$MMD_IN" == "/vagrant/lib/s-enda-mmd-xml" ]]; then
+  # Check out latest version of metadata
+  if [ -d s-enda-mmd-xml ]; then
+    echo "s-enda-mmd-xml repository exists locally, running git pull." | systemd-cat -t webhook-handler
+    cd s-enda-mmd-xml
     git pull
     cd ..
   else
     echo "Cloning repository." | systemd-cat -t webhook-handler
-    git clone https://github.com/metno/S-ENDA-metadata
+    git clone git@gitlab.met.no:mmd/s-enda-mmd-xml.git
   fi
 fi
 
@@ -37,7 +31,7 @@ docker-compose run --rm \
     -v /vagrant/lib/isostore:/isostore \
     -v $MMD_IN:/mmddir \
     iso-converter \
-    sentinel1_mmd_to_csw_iso19139.py -i /mmddir -o /isostore
+    xmlconverter.py -i /mmddir -o /isostore -t /usr/local/share/xslt/mmd-to-iso.xsl
 
 # Restart catalog-service-api
 docker-compose rm -sf catalog-service-api
