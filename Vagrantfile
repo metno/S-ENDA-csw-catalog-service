@@ -75,17 +75,21 @@ Vagrant.configure("2") do |config|
     ltest.vm.network "private_network", ip: "10.20.30.10"
     ltest.vm.provision "50-rebuild", type: "shell", run: "always", inline: <<-SHELL
       cd /vagrant
+      # what exactly does the below check mean?
       if [[ -n "#{ENV['BUILD']}" ]]
       then
         export DOCKERFILE='Dockerfile.localtest'
+        # Does "--pull" mean that it pulls the images from dockerhub even if the Docker files are changed locally?
         docker-compose -f docker-compose.yml -f docker-compose.build.yml build --pull
       fi
-      docker-compose up -d
+      #export DOCKERFILE='Dockerfile.localtest'
+      #docker-compose -f docker-compose.yml -f docker-compose.build.yml build
+      #docker-compose up -d
       # Set folder with input MMD files
       export MMD_IN='/vagrant/lib/input_mmd_files'
       export GET_GIT_MMD_FILES=true
       ./deploy-metadata.sh
-      echo "Done!"
+      docker-compose up -d
     SHELL
   end
 
