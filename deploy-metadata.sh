@@ -5,23 +5,15 @@ if [[ -z "${MMD_IN}" ]]; then
     exit
 fi
 
-# Work in shared folder
-cd /vagrant/lib
-
-if [[ "$MMD_IN" == "/vagrant/lib/s-enda-mmd-xml" ]]; then
-  # Check out latest version of metadata
-  if [ -d s-enda-mmd-xml ]; then
-    echo "s-enda-mmd-xml repository exists locally, running git pull." | systemd-cat -t webhook-handler
-    cd s-enda-mmd-xml
-    git pull
-    cd ..
-  else
-    echo "Cloning repository." | systemd-cat -t webhook-handler
-    git clone git@gitlab.met.no:mmd/s-enda-mmd-xml.git
-  fi
+if $GET_GIT_MMD_FILES; then
+  MMD_IN=$MMD_IN ./get_latest_metadata.sh
 fi
 
-rm -rf /isostore/*
+cd /vagrant/lib
+# Remove old iso files
+#rm isostore/*
+
+# Work in shared folder
 cd /vagrant
 export DOCKERFILE='Dockerfile.localtest'
 # add --no-cache to the end of the next line to get the latest version of MMD
@@ -33,6 +25,13 @@ docker-compose run --rm \
     iso-converter \
     xmlconverter.py -i /mmddir -o /isostore -t /usr/local/share/xslt/mmd-to-iso.xsl
 
-# Restart catalog-service-api
-docker-compose rm -sf catalog-service-api
-docker-compose up -d catalog-service-api
+## Restart catalog-service-api
+#docker-compose rm -sf catalog-service-api
+#docker-compose up -d catalog-service-api
+
+# Ingest metadata from ISO19139 xml files
+docker exec vagrant_catalog-service-api_1 python3 /usr/bin/pycsw-admin.py -c load_records -f /etc/pycsw/pycsw.cfg -p "$ISO_STORE" -r -y
+
+# Clean up
+#rm /vagrant/lib/isostore/*
+#rm $MMD_IN/*
