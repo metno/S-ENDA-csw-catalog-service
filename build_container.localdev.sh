@@ -34,8 +34,8 @@ docker run -p 80:8000 --name=$name \
     --volume /vagrant/lib/py-mmd-tools/script/xmlconverter.py:/home/pycsw/scripts/xmlconverter.py \
     --volume /vagrant/lib/mmd/xslt:/home/pycsw/mmd/xslt \
     --volume /vagrant/lib/py-mmd-tools/py_mmd_tools:/usr/local/lib/python3.8/site-packages/py_mmd_tools \
-    --volume /vagrant/lib/input_mmd_files:/home/pycsw/mmd_in \
-    --volume /vagrant/lib/output_pycsw_iso_xml_files:/home/pycsw/iso_out \
+    --volume $MMD_IN:/home/pycsw/mmd_in \
+    --volume /vagrant/lib/isostore:/home/pycsw/isostore \
     $name sleep 1d
     #$name --reload
     #$name bash
