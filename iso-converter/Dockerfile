@@ -4,6 +4,8 @@ FROM alpine:3.11 AS builder
 ENV MMD_REPO=https://github.com/metno/mmd
 ENV MMD_VERSION=${MMD_VERSION:-master}
 #ENV XSLTPATH=${XSLTPATH:-/usr/local/share/xslt}
+ENV MMD_TOOLS_REPO=https://github.com/metno/py-mmd-tools
+ENV MMD_TOOLS_VERSION=${MMD_TOOLS_VERSION:-master}
 
 RUN apk add --no-cache \
   git
@@ -14,6 +16,10 @@ RUN git clone ${MMD_REPO}; \
   cd mmd; \
   git checkout ${MMD_VERSION}; \
   chmod +x /mmd/bin/convert_to_mmd
+
+RUN git clone ${MMD_TOOLS_REPO}; \
+  cd py-mmd-tools; \
+  git checkout ${MMD_TOOLS_VERSION}
 
 # Second stage
 FROM alpine:3.11
@@ -38,6 +44,6 @@ RUN apk add --no-cache --virtual .build-deps \
 RUN ln -sf /usr/bin/python3 /usr/bin/python; \
       mkdir -p /usr/local/share/xslt
 
-COPY --from=builder /mmd/bin/sentinel1_mmd_to_csw_iso19139.py /usr/local/bin
-COPY --from=builder /mmd/mmd_utils/ /usr/lib/python3.8/site-packages/mmd_utils/
+COPY --from=builder /py-mmd-tools/script/xmlconverter.py /usr/local/bin
+COPY --from=builder /py-mmd-tools/py_mmd_tools/ /usr/lib/python3.8/site-packages/py_mmd_tools/
 COPY --from=builder /mmd/xslt/* /usr/local/share/xslt/

@@ -49,8 +49,6 @@ Vagrant.configure("2") do |config|
     # Keep bash history between ups and destroys
     cd /vagrant
     mkdir -p /vagrant/lib
-    export MMD_IN='/vagrant/lib/input_mmd_files'
-    mkdir -p $MMD_IN
     ./create_history_files.sh
   SHELL
 
@@ -62,6 +60,9 @@ Vagrant.configure("2") do |config|
       # Set up environment
       echo "alias l='ls -hlrt --color'" >> /home/vagrant/.bashrc
       echo "alias ..='cd ..'" >> /home/vagrant/.bashrc
+      # Set folder with input MMD files
+      #export MMD_IN='/vagrant/lib/s-enda-mmd-xml'
+      export MMD_IN='/vagrant/lib/input_mmd_files'
       # Build container for local development env
       cd /vagrant
       ./clone_or_update_git_repositories.sh
@@ -78,6 +79,9 @@ Vagrant.configure("2") do |config|
         export DOCKERFILE='Dockerfile.localtest'
         docker-compose -f docker-compose.yml -f docker-compose.build.yml build --pull
       fi
+      # Set folder with input MMD files
+      #export MMD_IN='/vagrant/lib/s-enda-mmd-xml'
+      export MMD_IN='/vagrant/lib/input_mmd_files'
       ./deploy-metadata.sh
       docker-compose up -d
     SHELL
