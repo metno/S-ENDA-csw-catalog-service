@@ -15,9 +15,9 @@ cd /vagrant/lib
 
 # Work in shared folder
 cd /vagrant
-#export DOCKERFILE='Dockerfile.localtest'
-## add --no-cache to the end of the next line to get the latest version of MMD
-#docker-compose -f docker-compose.yml -f docker-compose.build.yml build
+export DOCKERFILE='Dockerfile.localtest'
+# add --no-cache to the end of the next line to get the latest version of MMD
+docker-compose -f docker-compose.yml -f docker-compose.build.yml build
 docker-compose run --rm \
     -e XSLTPATH=/usr/local/share/xslt \
     -v /vagrant/lib/isostore:/isostore \
@@ -25,13 +25,16 @@ docker-compose run --rm \
     iso-converter \
     xmlconverter.py -i /mmddir -o /isostore -t /usr/local/share/xslt/mmd-to-iso.xsl
 
-## Restart catalog-service-api
-#docker-compose rm -sf catalog-service-api
-#docker-compose up -d catalog-service-api
+# Restart catalog-service-api
+# this basically runs catalog-service/pycsw_setup.py which runs
+# python3 /usr/bin/pycsw-admin.py -c load_records -f /etc/pycsw/pycsw.cfg -p "$ISO_STORE" -r -y 
+docker-compose rm -sf catalog-service-api
+docker-compose up -d catalog-service-api
 
-# This would be preferred instead of rebuilding but I can't make it work
+# We may prefer to have a separate container for indexing in pycsw..
+# The following, or a similar solution, would be preferred instead of rebuilding but I can't make it work
 # Ingest metadata from ISO19139 xml files
-docker exec vagrant_catalog-service-api_1 python3 /usr/bin/pycsw-admin.py -c load_records -f /etc/pycsw/pycsw.cfg -p "$ISO_STORE" -r -y
+#docker exec vagrant_catalog-service-api_1 python3 /usr/bin/pycsw-admin.py -c load_records -f /etc/pycsw/pycsw.cfg -p "$ISO_STORE" -r -y
 
 # Clean up
 #rm /vagrant/lib/isostore/*

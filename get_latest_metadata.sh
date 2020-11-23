@@ -7,14 +7,14 @@ if [ -d s-enda-mmd-xml ]; then
   cd s-enda-mmd-xml
   # Get commit hash
   PREV=$(git rev-parse HEAD)
-  git pull
+  git pull || echo "Could not read from git repository - continuing script execution..."
   NEW=$(git rev-parse HEAD)
   if [ "${NEW}" == "${PREV}" ]; then
       PREV=$(git rev-parse HEAD~)
   fi
 else
   echo "Cloning repository."
-  git clone git@gitlab.met.no:mmd/s-enda-mmd-xml.git
+  git clone git@gitlab.met.no:mmd/s-enda-mmd-xml.git || echo "Could not read from git repository - continuing script execution..."
   #git clone https://gitlab.met.no/mmd/s-enda-mmd-xml.git
   cd s-enda-mmd-xml
   PREV=$(git rev-parse HEAD~)
