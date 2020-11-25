@@ -85,7 +85,10 @@ Vagrant.configure("2") do |config|
       docker-compose up -d
       # Set folder with input MMD files
       export MMD_IN='/vagrant/lib/input_mmd_files'
+      # Get updates from gitlab repo
       export GET_GIT_MMD_FILES=1
+      ## Don't get updates from gitlab repo (test your own files that you have added to $MMD_IN)
+      #export GET_GIT_MMD_FILES=0
       ./deploy-metadata.sh
     SHELL
   end
