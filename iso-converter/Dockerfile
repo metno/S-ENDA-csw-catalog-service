@@ -34,12 +34,13 @@ RUN apk add --no-cache --virtual .build-deps \
   libxml2-dev \
   libxslt-dev \
   py3-pip \
-  python3-dev; \
-  pip3 install \
-  lxml==4.5.0 \
-  xmltodict==0.12.0 \
-  parmap==1.5.2; \
-  apk del .build-deps
+  python3-dev
+RUN pip3 install --upgrade pip && \
+      pip3 install --no-cache \
+        lxml==4.5.0 \
+        xmltodict==0.12.0 \
+        parmap==1.5.2
+RUN apk del .build-deps
 
 RUN ln -sf /usr/bin/python3 /usr/bin/python; \
       mkdir -p /usr/local/share/xslt
