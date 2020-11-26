@@ -18,6 +18,6 @@ for REPO in mmd pycsw py-mmd-tools; do
     cd ..
   else
     echo "Cloning $REPO"
-    git clone git@github.com:metno/$REPO.git
+    git clone https://github.com/metno/$REPO
   fi
 done
