@@ -28,5 +28,3 @@ docker-compose exec -T catalog-service-api bash -c 'python3 /usr/bin/pycsw-admin
 # Clean up
 rm /vagrant/lib/isostore/*
 rm $MMD_IN/*
-
-echo "hei"
