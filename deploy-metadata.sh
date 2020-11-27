@@ -10,7 +10,11 @@ if [[ $GET_GIT_MMD_FILES -eq 1 ]]; then
 fi
 
 # Remove old iso files
-rm /vagrant/lib/isostore/*
+if [ -z "$(ls -A /vagrant/lib/isostore)" ]; then
+  echo "Empty dir"
+else
+  rm /vagrant/lib/isostore/*
+fi
 
 # Work in shared folder
 cd /vagrant
@@ -26,5 +30,13 @@ docker-compose run --rm \
 docker-compose exec -T catalog-service-api bash -c 'python3 /usr/bin/pycsw-admin.py -c load_records -f /etc/pycsw/pycsw.cfg -p $ISO_STORE -r -y'
 
 # Clean up
-rm /vagrant/lib/isostore/*
-rm $MMD_IN/*
+if [ -z "$(ls -A /vagrant/lib/isostore)" ]; then
+  echo "Empty dir"
+else
+  rm /vagrant/lib/isostore/*
+fi
+if [ -z "$(ls -A $MMD_IN)" ]; then
+  echo "Empty dir"
+else
+  rm $MMD_IN/*
+fi
