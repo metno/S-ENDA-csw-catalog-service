@@ -7,7 +7,7 @@ name=catalog-dev
 docker rm -f $name 2> /dev/null
 
 # Build image
-docker build -t $name -f localdev/Dockerfile .
+docker build -t $name -f localdev/Dockerfile.localdev .
 
 cd /vagrant/lib/pycsw
 # build container
