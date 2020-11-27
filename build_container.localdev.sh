@@ -7,7 +7,7 @@ name=catalog-dev
 docker rm -f $name 2> /dev/null
 
 # Build image
-docker build -t $name -f localdev/Dockerfile.localdev .
+docker build -t $name -f localdev/Dockerfile .
 
 cd /vagrant/lib/pycsw
 # build container
@@ -15,6 +15,7 @@ cd /vagrant/lib/pycsw
 docker run -p 80:8000 --name=$name \
     --entrypoint "" \
     --env XSLTPATH=/home/pycsw/mmd/xslt \
+    --env CSW_SERVICE_URL="http://10.20.30.11:80" \
     --detach \
     --volume ${PWD}/pycsw:/usr/local/lib/python3.8/site-packages/pycsw \
     --volume ${PWD}/tests:/home/pycsw/tests \

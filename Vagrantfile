@@ -78,7 +78,7 @@ Vagrant.configure("2") do |config|
       # if BUILD is set
       if [[ -n "#{ENV['BUILD']}" ]]
       then
-        export DOCKERFILE='Dockerfile.localtest'
+        export DOCKERFILE='Dockerfile'
         # "--pull" means that it pulls the base images from dockerhub if they have been updated (e.g., alpine or pycsw images)
         docker-compose -f docker-compose.yml -f docker-compose.build.yml build --pull
       fi
