@@ -25,7 +25,7 @@ on:
 
 env:
   # TODO: remember to update version on new tag
-  LATEST_TAG: 0.2.4
+  LATEST_TAG: 0.2.5
   DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
   DOCKER_HUB_PASS: ${{ secrets.DOCKER_HUB_PASS }}
 
@@ -40,6 +40,7 @@ jobs:
         ref:
           - master
           - 0.2.4
+          - 0.2.5
     steps:
       - uses: actions/checkout@v2
         with:
