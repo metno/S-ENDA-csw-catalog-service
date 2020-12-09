@@ -1,4 +1,5 @@
-FROM metno/pycsw:2.4.2
+FROM geopython/pycsw:2.6.0
+#FROM metno/pycsw:2.4.2
 
 USER root
 
